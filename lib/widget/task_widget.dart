@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../data/task.dart';
+import 'package:notes/data/task.dart';
 import '../screens/edit_task.dart';
 
 class TaskWidget extends StatefulWidget {

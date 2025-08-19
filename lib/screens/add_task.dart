@@ -4,8 +4,8 @@ import 'package:notes/widget/task_type_item_list.dart';
 
 import 'package:day_night_time_picker/day_night_time_picker.dart';
 
-import '../data/task.dart';
-import '../utility/utility.dart';
+import 'package:notes/data/task.dart';
+import 'package:notes/utility/utility.dart';
 
 class AddTask extends StatefulWidget {
   const AddTask({super.key});

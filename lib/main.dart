@@ -11,7 +11,9 @@ void main() async {
   Hive.registerAdapter(TaskAdapter());
   Hive.registerAdapter(TaskTypeAdapter());
   Hive.registerAdapter(TaskTypeEnumAdapter());
-  await Hive.openBox<Task>('taskBox');
+  if (!Hive.isBoxOpen('taskBox')) {
+    await Hive.openBox<Task>('taskBox');
+  }
   runApp(
     const Application(),
   );

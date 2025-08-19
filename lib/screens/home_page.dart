@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-
+import 'package:notes/data/task.dart';
+import 'package:notes/screens/add_task.dart';
 import 'package:notes/widget/task_widget.dart';
-
-import '../data/task.dart';
-import 'add_task.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -17,40 +15,40 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   bool isChecked = false;
 
-  var taskbox = Hive.box<Task>('taskBox');
+  final taskbox = Hive.box<Task>('taskBox');
 
   bool isFabVisible = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xffe5e5e5),
       body: Center(
         child: ValueListenableBuilder(
-            valueListenable: taskbox.listenable(),
-            builder: (BuildContext context, Object value, Widget? child) {
-              return NotificationListener<UserScrollNotification>(
-                onNotification: (UserScrollNotification notification) {
-                  setState(() {
-                    if (notification.direction == ScrollDirection.forward) {
-                      isFabVisible = true;
-                    }
-                    if (notification.direction == ScrollDirection.reverse) {
-                      isFabVisible = false;
-                    }
-                  });
-
-                  return true;
+          valueListenable: taskbox.listenable(),
+          builder: (BuildContext context, Object value, Widget? child) {
+            return NotificationListener<UserScrollNotification>(
+              onNotification: (UserScrollNotification notification) {
+                setState(() {
+                  if (notification.direction == ScrollDirection.forward) {
+                    isFabVisible = true;
+                  }
+                  if (notification.direction == ScrollDirection.reverse) {
+                    isFabVisible = false;
+                  }
+                });
+                return true;
+              },
+              child: ListView.builder(
+                itemCount: taskbox.values.length,
+                itemBuilder: (BuildContext context, int index) {
+                  Task task = taskbox.values.toList()[index];
+                  return _getListItem(task);
                 },
-                child: ListView.builder(
-                  itemCount: taskbox.values.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    Task task = taskbox.values.toList()[index];
-
-                    return _getListItem(task);
-                  },
-                ),
-              );
-            }),
+              ),
+            );
+          },
+        ),
       ),
       floatingActionButton: Visibility(
         visible: isFabVisible,

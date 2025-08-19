@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:notes/widget/task_type_item_list.dart';
 
-import '../data/task.dart';
+import 'package:notes/data/task.dart';
 import '../utility/utility.dart';
 
 class EditTask extends StatefulWidget {
