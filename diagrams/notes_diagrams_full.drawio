@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mxfile host="app.diagrams.net" modified="2025-08-19T16:20:06.584281Z">
+  <diagram name="ERD" id="diag-1">
+    <mxGraphModel>
+      <root>
+        <mxCell id="0" value=""/>
+        <mxCell id="1" value="" parent="0"/>
+        <mxCell id="2" value="&lt;b&gt;TASK_TYPE&lt;/b&gt;&lt;hr/&gt;&lt;div&gt;&lt;u&gt;id&lt;/u&gt; : int PK NOT NULL&lt;/div&gt;&lt;div&gt;title : string NOT NULL UNIQUE&lt;/div&gt;&lt;div&gt;image : string NULL&lt;/div&gt;&lt;div&gt;enum_type : enum NOT NULL&lt;/div&gt;" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=6;" vertex="1" parent="1">
+          <mxGeometry x="60" y="60" width="220" height="140" as="geometry"/>
+        </mxCell>
+        <mxCell id="3" value="&lt;b&gt;TASK&lt;/b&gt;&lt;hr/&gt;&lt;div&gt;&lt;u&gt;id&lt;/u&gt; : int PK NOT NULL&lt;/div&gt;&lt;div&gt;title : string NOT NULL&lt;/div&gt;&lt;div&gt;sub_title : string NULL&lt;/div&gt;&lt;div&gt;is_done : bool DEFAULT false&lt;/div&gt;&lt;div&gt;time : datetime NULL&lt;/div&gt;&lt;div&gt;task_type_id : int FK NOT NULL&lt;/div&gt;" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=6;" vertex="1" parent="1">
+          <mxGeometry x="380" y="40" width="260" height="180" as="geometry"/>
+        </mxCell>
+        <mxCell id="4" value="" style="shape=link;endArrow=ERzeroToMany;startArrow=ERmandatory;html=1;" edge="1" parent="1" source="2" target="3">
+          <mxGeometry x="0" y="0" width="0" height="0" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="7" value="TASK_TYPE (1) ← categorizes → (0..*) TASK" style="shape=note;whiteSpace=wrap;html=1;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="260" width="580" height="60" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="Class Diagram" id="diag-2">
+    <mxGraphModel>
+      <root>
+        <mxCell id="0" value=""/>
+        <mxCell id="1" value="" parent="0"/>
+        <mxCell id="101" value="&lt;b&gt;&amp;lt;&amp;lt;enumeration&amp;gt;&amp;gt; TaskTypeEnum&lt;/b&gt;&lt;hr/&gt;working&lt;br/&gt;date&lt;br/&gt;foucs&lt;br/&gt;official&lt;br/&gt;gym&lt;br/&gt;businessDate" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=6;" vertex="1" parent="1">
+          <mxGeometry x="560" y="60" width="180" height="160" as="geometry"/>
+        </mxCell>
+        <mxCell id="102" value="&lt;b&gt;TaskType&lt;/b&gt;&lt;hr/&gt;-id: int&lt;br/&gt;+image: String&lt;br/&gt;+title: String&lt;br/&gt;+enumType: TaskTypeEnum" style="swimlane;rounded=1;html=1;startSize=30;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="300" y="60" width="220" height="160" as="geometry"/>
+        </mxCell>
+        <mxCell id="103" value="&lt;b&gt;Task&lt;/b&gt;&lt;hr/&gt;-id: int&lt;br/&gt;+title: String&lt;br/&gt;+subTitle: String&lt;br/&gt;+isDone: bool&lt;br/&gt;+time: DateTime?&lt;br/&gt;+taskType: TaskType" style="swimlane;rounded=1;html=1;startSize=30;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="240" height="200" as="geometry"/>
+        </mxCell>
+        <mxCell id="104" value="&lt;b&gt;HomePage&lt;/b&gt;&lt;hr/&gt;-taskBox: Box&amp;lt;Task&amp;gt;&lt;br/&gt;+build(context)" style="swimlane;rounded=1;html=1;startSize=30;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="40" y="280" width="220" height="110" as="geometry"/>
+        </mxCell>
+        <mxCell id="105" value="&lt;b&gt;AddTask&lt;/b&gt;&lt;hr/&gt;-selectedTaskTypeItem: int&lt;br/&gt;-_dateTime: DateTime?&lt;br/&gt;+addTask(title, subTitle)" style="swimlane;rounded=1;html=1;startSize=30;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="300" y="260" width="240" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="106" value="&lt;b&gt;EditTask&lt;/b&gt;&lt;hr/&gt;+task: Task&lt;br/&gt;+editTask(title, subTitle, dateTime?)" style="swimlane;rounded=1;html=1;startSize=30;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="580" y="260" width="220" height="110" as="geometry"/>
+        </mxCell>
+        <mxCell id="201" value="" style="endArrow=open;dashed=0;html=1;rounded=0;" edge="1" parent="1" source="103" target="102">
+          <mxGeometry x="0" y="0" width="0" height="0" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="202" value="" style="endArrow=open;dashed=0;html=1;rounded=0;" edge="1" parent="1" source="102" target="101">
+          <mxGeometry x="0" y="0" width="0" height="0" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="203" value="" style="endArrow=open;dashed=0;html=1;rounded=0;" edge="1" parent="1" source="104" target="103">
+          <mxGeometry x="0" y="0" width="0" height="0" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="204" value="" style="endArrow=open;dashed=0;html=1;rounded=0;" edge="1" parent="1" source="105" target="103">
+          <mxGeometry x="0" y="0" width="0" height="0" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="205" value="" style="endArrow=open;dashed=0;html=1;rounded=0;" edge="1" parent="1" source="106" target="103">
+          <mxGeometry x="0" y="0" width="0" height="0" relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
