@@ -1,12 +1,12 @@
+// Import necessary packages for UI, database, widgets, and utilities.
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:notes/widget/task_type_item_list.dart';
-
 import 'package:day_night_time_picker/day_night_time_picker.dart';
-
 import 'package:notes/data/task.dart';
 import 'package:notes/utility/utility.dart';
 
+// A stateful widget for adding a new task.
 class AddTask extends StatefulWidget {
   const AddTask({super.key});
 
@@ -15,45 +15,55 @@ class AddTask extends StatefulWidget {
 }
 
 class _AddTaskState extends State<AddTask> {
+  // Focus nodes to manage the focus of text fields.
   FocusNode myFocusNode1 = FocusNode();
   FocusNode myFocusNode2 = FocusNode();
 
+  // Controllers for the text fields to manage their content.
   TextEditingController controllerTitle = TextEditingController();
   TextEditingController controllerSubTitle = TextEditingController();
+  // The Hive box for storing tasks.
   final Box<Task> box = Hive.box<Task>('taskBox');
 
+  // The index of the selected task type.
   int selectedTaskTypeItem = 0;
+
   @override
   void initState() {
+    super.initState();
+    // Add listeners to the focus nodes to rebuild the UI when focus changes.
     myFocusNode1.addListener(() {
       setState(() {});
     });
     myFocusNode2.addListener(() {
       setState(() {});
     });
-
-    super.initState();
   }
 
   @override
   void dispose() {
+    // Dispose of the focus nodes to free up resources.
     myFocusNode1.dispose();
     myFocusNode2.dispose();
-
     super.dispose();
   }
 
+  // The selected time for the task.
   Time? _time = Time(hour: 22, minute: 30);
+  // The selected date and time for the task.
   DateTime? _dateTime;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // Prevents the UI from resizing when the keyboard appears.
       resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Center(
           child: Column(
             children: <Widget>[
               const SizedBox(height: 50),
+              // Text field for the task title.
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 44),
                 child: Directionality(
@@ -95,6 +105,7 @@ class _AddTaskState extends State<AddTask> {
                 ),
               ),
               const SizedBox(height: 50),
+              // Text field for the task subtitle/description.
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 44),
                 child: Directionality(
@@ -138,6 +149,7 @@ class _AddTaskState extends State<AddTask> {
                 ),
               ),
               const SizedBox(height: 50),
+              // Button to open the time picker.
               TextButton(
                 onPressed: () {
                   Navigator.of(context).push(
@@ -148,7 +160,6 @@ class _AddTaskState extends State<AddTask> {
                         _time = time;
                       },
                       minuteInterval: TimePickerInterval.FIVE,
-                      // Optional onChange to receive value as DateTime
                       onChangeDateTime: (DateTime dateTime) {
                         _dateTime = dateTime;
                       },
@@ -166,6 +177,7 @@ class _AddTaskState extends State<AddTask> {
                   ),
                 ),
               ),
+              // Horizontal list of task types.
               SizedBox(
                 height: 200,
                 child: ListView.builder(
@@ -188,6 +200,7 @@ class _AddTaskState extends State<AddTask> {
                 ),
               ),
               const Spacer(),
+              // Button to add the task.
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xff18daa3),
@@ -215,6 +228,7 @@ class _AddTaskState extends State<AddTask> {
     );
   }
 
+  // Method to add a new task to the Hive box.
   addTask(String taskTitle, String tastSubTitle) {
     Task task = Task(
         title: taskTitle,

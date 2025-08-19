@@ -1,24 +1,28 @@
+// Import necessary packages and screens.
 import 'package:flutter/material.dart';
-
 import 'package:notes/data/task.dart';
 import '../screens/edit_task.dart';
 
+// A stateful widget that displays a single task.
 class TaskWidget extends StatefulWidget {
   TaskWidget({super.key, required this.task});
 
-  Task task;
+  // The task data to be displayed.
+  final Task task;
 
   @override
   State<TaskWidget> createState() => _TaskWidgetState();
 }
 
 class _TaskWidgetState extends State<TaskWidget> {
+  // A boolean to track the checked state of the task.
   bool isBoxChecked = false;
 
   @override
   void initState() {
-    isBoxChecked = widget.task.isDone;
     super.initState();
+    // Initialize the checked state from the task data.
+    isBoxChecked = widget.task.isDone;
   }
 
   @override
@@ -26,9 +30,10 @@ class _TaskWidgetState extends State<TaskWidget> {
     return _getTaskItem();
   }
 
+  // Builds the main container for the task item.
   Widget _getTaskItem() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 30),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Container(
         height: 132,
         width: double.infinity,
@@ -37,13 +42,14 @@ class _TaskWidgetState extends State<TaskWidget> {
           borderRadius: BorderRadius.circular(10),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(12.0),
           child: _getMainContent(),
         ),
       ),
     );
   }
 
+  // Builds the main content of the task item.
   Widget _getMainContent() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
@@ -52,9 +58,11 @@ class _TaskWidgetState extends State<TaskWidget> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
+              // Row for the checkbox and task title.
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
+                  // Checkbox to mark the task as done.
                   Transform.scale(
                     scale: 1.4,
                     child: Checkbox(
@@ -66,19 +74,19 @@ class _TaskWidgetState extends State<TaskWidget> {
                       onChanged: (bool? value) {
                         setState(() {
                           isBoxChecked = value!;
-
                           widget.task.isDone = isBoxChecked;
-
-                          widget.task.save();
+                          widget.task.save(); // Save the updated task status.
                         });
                       },
                     ),
                   ),
+                  // Display the task title.
                   Text(widget.task.title.isEmpty
                       ? 'بدون عنوان'
                       : widget.task.title),
                 ],
               ),
+              // Display the task subtitle.
               Text(
                 widget.task.subTitle.isEmpty
                     ? 'بدون توضیحات'
@@ -86,19 +94,23 @@ class _TaskWidgetState extends State<TaskWidget> {
                 overflow: TextOverflow.ellipsis,
               ),
               const Spacer(),
-              _getTimeAndEditBadgs(),
+              // Row for the time and edit badges.
+              _getTimeAndEditBadges(),
             ],
           ),
         ),
         const SizedBox(width: 20),
+        // Display the image for the task type.
         Image.asset(widget.task.taskType.image),
       ],
     );
   }
 
-  Widget _getTimeAndEditBadgs() {
+  // Builds the time and edit badges.
+  Widget _getTimeAndEditBadges() {
     return Row(
       children: <Widget>[
+        // Time badge.
         Container(
           width: 85,
           height: 28,
@@ -114,9 +126,10 @@ class _TaskWidgetState extends State<TaskWidget> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
+                // Display the task time.
                 widget.task.time != null
                     ? Text(
-                        '${widget.task.time!.hour}:${widget.task.time!.minute}',
+                        '${widget.task.time!.hour}:${widget.task.time!.minute.toString().padLeft(2, '0')}',
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 14,
@@ -138,6 +151,7 @@ class _TaskWidgetState extends State<TaskWidget> {
           ),
         ),
         const SizedBox(width: 15),
+        // Edit button.
         InkWell(
           onTap: () {
             Navigator.push(
@@ -156,17 +170,21 @@ class _TaskWidgetState extends State<TaskWidget> {
               borderRadius: BorderRadius.circular(18),
               color: const Color(0xffe2f6f1),
             ),
-            child: Row(
-              children: <Widget>[
-                const Text(
-                  'ویرایش',
-                  style: TextStyle(
-                    color: Color(0xff18daa3),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  const Text(
+                    'ویرایش',
+                    style: TextStyle(
+                      color: Color(0xff18daa3),
+                    ),
                   ),
-                ),
-                const SizedBox(width: 5),
-                Image.asset('assets/images/icon_edit.png'),
-              ],
+                  const SizedBox(width: 5),
+                  Image.asset('assets/images/icon_edit.png'),
+                ],
+              ),
             ),
           ),
         ),

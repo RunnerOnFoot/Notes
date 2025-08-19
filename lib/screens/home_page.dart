@@ -1,3 +1,4 @@
+// Import necessary packages for UI, database, and widgets.
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -5,6 +6,7 @@ import 'package:notes/data/task.dart';
 import 'package:notes/screens/add_task.dart';
 import 'package:notes/widget/task_widget.dart';
 
+// The main screen of the application, displaying a list of tasks.
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -13,10 +15,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  bool isChecked = false;
-
+  // The Hive box for storing tasks.
   final taskbox = Hive.box<Task>('taskBox');
-
+  // A boolean to control the visibility of the FloatingActionButton.
   bool isFabVisible = true;
 
   @override
@@ -24,9 +25,11 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: const Color(0xffe5e5e5),
       body: Center(
+        // ValueListenableBuilder listens to the task box and rebuilds the UI when data changes.
         child: ValueListenableBuilder(
           valueListenable: taskbox.listenable(),
           builder: (BuildContext context, Object value, Widget? child) {
+            // NotificationListener detects scroll events to show/hide the FAB.
             return NotificationListener<UserScrollNotification>(
               onNotification: (UserScrollNotification notification) {
                 setState(() {
@@ -39,6 +42,7 @@ class _HomePageState extends State<HomePage> {
                 });
                 return true;
               },
+              // ListView.builder efficiently builds the list of tasks.
               child: ListView.builder(
                 itemCount: taskbox.values.length,
                 itemBuilder: (BuildContext context, int index) {
@@ -50,6 +54,7 @@ class _HomePageState extends State<HomePage> {
           },
         ),
       ),
+      // FloatingActionButton for adding new tasks.
       floatingActionButton: Visibility(
         visible: isFabVisible,
         child: FloatingActionButton(
@@ -68,11 +73,14 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  // Returns a Dismissible widget for a task item, allowing swipe-to-delete.
   Widget _getListItem(Task task) {
     return Dismissible(
+      // Called when the item is dismissed.
       onDismissed: (DismissDirection direction) {
         task.delete();
       },
+      // Asks for confirmation before dismissing.
       confirmDismiss: (DismissDirection direction) {
         return showDialog(
           context: context,
@@ -86,7 +94,7 @@ class _HomePageState extends State<HomePage> {
                 actions: <Widget>[
                   TextButton(
                     onPressed: () {
-                      Navigator.of(context).pop(false);
+                      Navigator.of(context).pop(false); // Don't dismiss.
                     },
                     child: const Text(
                       'خیر',
@@ -95,7 +103,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   TextButton(
                     onPressed: () {
-                      Navigator.of(context).pop(true);
+                      Navigator.of(context).pop(true); // Dismiss.
                     },
                     child: const Text(
                       'بله',
@@ -108,7 +116,7 @@ class _HomePageState extends State<HomePage> {
           },
         );
       },
-      key: UniqueKey(),
+      key: UniqueKey(), // A unique key for each Dismissible item.
       child: TaskWidget(
         task: task,
       ),

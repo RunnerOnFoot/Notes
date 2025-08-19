@@ -1,32 +1,39 @@
+// Import necessary packages for UI, database, widgets, and utilities.
 import 'package:day_night_time_picker/day_night_time_picker.dart';
-
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:notes/widget/task_type_item_list.dart';
-
 import 'package:notes/data/task.dart';
 import '../utility/utility.dart';
 
+// A stateful widget for editing an existing task.
 class EditTask extends StatefulWidget {
   EditTask({super.key, required this.task});
 
-  Task task;
+  // The task to be edited.
+  final Task task;
 
   @override
   State<EditTask> createState() => _EditTaskState();
 }
 
 class _EditTaskState extends State<EditTask> {
+  // Focus nodes to manage the focus of text fields.
   FocusNode myFocusNode1 = FocusNode();
   FocusNode myFocusNode2 = FocusNode();
 
+  // Controllers for the text fields, initialized with the task's current data.
   late TextEditingController controllerTitle =
       TextEditingController(text: widget.task.title);
   late TextEditingController controllerSubTitle =
       TextEditingController(text: widget.task.subTitle);
+  // The Hive box for storing tasks.
   final Box<Task> box = Hive.box<Task>('taskBox');
+
   @override
   void initState() {
+    super.initState();
+    // Add listeners to the focus nodes to rebuild the UI when focus changes.
     myFocusNode1.addListener(() {
       setState(() {});
     });
@@ -34,60 +41,40 @@ class _EditTaskState extends State<EditTask> {
       setState(() {});
     });
 
+    // Set the selected task type based on the current task's type.
     selectedTaskTypeItem = getTaskTypeList().indexWhere(
       (element) {
         return element.enumType == widget.task.taskType.enumType;
       },
     );
-
-    // switch (widget.task.taskType.enumType) {
-    //   case TaskTypeEnum.working:
-    //     selectedTaskTypeItem = 0;
-    //     break;
-    //   case TaskTypeEnum.date:
-    //     selectedTaskTypeItem = 1;
-    //     break;
-    //   case TaskTypeEnum.foucs:
-    //     selectedTaskTypeItem = 2;
-    //     break;
-    //   case TaskTypeEnum.official:
-    //     selectedTaskTypeItem = 3;
-    //     break;
-    //   case TaskTypeEnum.gym:
-    //     selectedTaskTypeItem = 4;
-    //     break;
-    //   case TaskTypeEnum.businessDate:
-    //     selectedTaskTypeItem = 5;
-    //     break;
-    //   default:
-    // }
-
-    super.initState();
   }
 
   @override
   void dispose() {
+    // Dispose of the focus nodes to free up resources.
     myFocusNode1.dispose();
     myFocusNode2.dispose();
-
     super.dispose();
   }
 
+  // The selected time for the task.
   Time _time = Time(hour: 22, minute: 30);
-
+  // The selected date and time for the task.
   DateTime? _dateTime;
-
+  // The index of the selected task type.
   int selectedTaskTypeItem = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // Prevents the UI from resizing when the keyboard appears.
       resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Center(
           child: Column(
             children: <Widget>[
               const SizedBox(height: 50),
+              // Text field for the task title.
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 44),
                 child: Directionality(
@@ -129,6 +116,7 @@ class _EditTaskState extends State<EditTask> {
                 ),
               ),
               const SizedBox(height: 100),
+              // Text field for the task subtitle/description.
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 44),
                 child: Directionality(
@@ -171,6 +159,7 @@ class _EditTaskState extends State<EditTask> {
                   ),
                 ),
               ),
+              // Button to open the time picker.
               TextButton(
                 onPressed: () {
                   Navigator.of(context).push(
@@ -181,7 +170,6 @@ class _EditTaskState extends State<EditTask> {
                         _time = time;
                       },
                       minuteInterval: TimePickerInterval.FIVE,
-                      // Optional onChange to receive value as DateTime
                       onChangeDateTime: (DateTime dateTime) {
                         _dateTime = dateTime;
                       },
@@ -199,6 +187,7 @@ class _EditTaskState extends State<EditTask> {
                   ),
                 ),
               ),
+              // Horizontal list of task types.
               SizedBox(
                 height: 200,
                 child: ListView.builder(
@@ -221,6 +210,7 @@ class _EditTaskState extends State<EditTask> {
                 ),
               ),
               const Spacer(),
+              // Button to save the edited task.
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xff18daa3),
@@ -232,7 +222,7 @@ class _EditTaskState extends State<EditTask> {
                   editTask(
                     taskTitle,
                     tastSubTitle,
-                    _dateTime!,
+                    _dateTime,
                   );
                   Navigator.pop(context);
                 },
@@ -251,6 +241,7 @@ class _EditTaskState extends State<EditTask> {
     );
   }
 
+  // Method to save the edited task.
   editTask(
     String taskTitle,
     String tastSubTitle,
@@ -258,8 +249,8 @@ class _EditTaskState extends State<EditTask> {
   ) {
     widget.task.title = taskTitle;
     widget.task.subTitle = tastSubTitle;
-    widget.task.time = dateTime;
+    widget.task.time = dateTime ?? widget.task.time; // Keep old time if new one is null
     widget.task.taskType = getTaskTypeList()[selectedTaskTypeItem];
-    widget.task.save();
+    widget.task.save(); // Save the changes to the Hive box.
   }
 }
