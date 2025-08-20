@@ -112,7 +112,7 @@ class _TaskWidgetState extends State<TaskWidget> {
       children: <Widget>[
         // Time badge.
         Container(
-          width: 85,
+          width: 86,
           height: 28,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(18),
@@ -164,14 +164,14 @@ class _TaskWidgetState extends State<TaskWidget> {
             );
           },
           child: Container(
-            width: 85,
+            width: 87,
             height: 28,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(18),
               color: const Color(0xffe2f6f1),
             ),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
